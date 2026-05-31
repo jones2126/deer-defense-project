@@ -37,7 +37,7 @@ An AI-powered, automated water gun turret that detects deer using computer visio
 | Buck converter (×2) | DROK 12V→5V 5A USB — one per rail ⚠️ untested | [Amazon](https://www.amazon.com/Converter-DROK-Regulator-Inverter-Transformer/dp/B01NALDSJ0) | $15 (2-pack) |
 | Misc electronics | Jumper wires, breadboard, Dupont connectors, heat shrink, fuse | — | ~$15 |
 | Enclosure & mounting | Weatherproof box for Orange Pi, cable ties, silicone sealant, screws | — | ~$15–30 |
-| **Total (estimated)** | | | **~$290** |
+| **Total (estimated)** | | | **~$320–335** |
 
 **Notes:**
 - Water gun: look for a DC motor pump triggered by holding a button — easy to wire a MOSFET/relay in parallel with the trigger contacts
