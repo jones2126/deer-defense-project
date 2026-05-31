@@ -30,10 +30,13 @@ An AI-powered, automated water gun turret that detects deer using computer visio
 - Optional: **PCA9685** 16-channel PWM servo driver (I²C) — reduces jitter, frees GPIO pins
 
 ### 3. Water Gun & Triggering
-- **Battery-powered electric water gun** (cheap toy) — disassemble to access pump circuit
+- **Battery-powered electric water gun** (cheap toy) — disassemble to access pump circuit; look for one with a simple DC motor pump triggered by holding the button (not a manual pump)
 - **IRLZ44N** N-channel logic-level MOSFET + resistors (10kΩ pull-down, ~220Ω gate resistor)
 - Alternative: 5V relay module (simpler/safer isolation)
 - Jumper wires, breadboard/perfboard, Dupont connectors, heat shrink
+
+> ⚠️ **Untested — requires further research and testing before purchase:**
+> [Liberty Imports Motorized Automatic Electric Water Gun (AK-47 style)](https://www.amazon.com/Liberty-Imports-Operated-Motorized-Automatic/dp/B07G4LKXVR) — battery-operated DC motor pump, simple circuit to tap into with a MOSFET/relay, similar style to the one used in the original pigeon defense project
 
 ### 4. Mechanical & Mounting
 - 3D-printed or custom turret mount (holds camera + servos + water gun)
@@ -89,19 +92,24 @@ The simplest option is a quality **5V/4A USB-C wall adapter** plugged directly i
 - Output: **5V @ 5A**
 - Input: 12V
 - Wattage draw from 12V source: ~25W → ~2.1A @ 12V
-- Recommended module: **DROK DC-DC Buck Converter 5A** (LM2596 or XL4005 based, ~$10–12)
-  - Must output clean, stable 5V — avoid ultra-cheap modules for this rail
-  - Use a USB-C cable or barrel connector adapter to connect to the Orange Pi
+- Must output clean, stable 5V — avoid ultra-cheap modules for this rail
+- Use a USB-C cable or barrel connector adapter to connect to the Orange Pi
 
-### Rail 2 — Servos + Water Gun Pump (5–6V/5A)
+> ⚠️ **Untested — requires further research and testing before purchase:**
+> [GoHz DC Buck Converter 12V to 5V 5A 25W (2-pack)](https://www.amazon.com/GoHz-DC-Buck-Converter-Regulator/dp/B0DZNSMJFW) — fixed 5V output, 95%+ efficiency, over-current/voltage/temp protection
 
-- Output: **5V or 6V @ 5A** (adjustable)
+### Rail 2 — Servos + Water Gun Pump (5–6V adjustable)
+
+- Output: **5V or 6V @ 3A+** (adjustable)
 - Input: 12V
 - Wattage draw from 12V source: ~30W → ~2.5A @ 12V
-- Recommended module: **LM2596 adjustable buck converter** (~$8–10 for a 3-pack on Amazon)
-  - Set output to 5V for MG90S servos or 6V for MG996R servos
-  - 3A continuous rating is sufficient for two servos + pump under normal (non-stall) conditions
-  - Add a 5A fuse on this rail as protection
+- Set output to 5V for MG90S servos or 6V for MG996R servos
+- LED voltage display makes it easy to confirm output before connecting anything
+- 3A continuous is sufficient for two servos + pump under normal (non-stall) conditions
+- Add a 5A fuse on this rail as protection
+
+> ⚠️ **Untested — requires further research and testing before purchase:**
+> [DROK LM2596 Adjustable Buck Converter with LED Display](https://www.amazon.com/Converter-DROK-Immersion-Regulator-Transformer/dp/B078XQ5MWR) — 4–40V in, 1.23–37V adjustable out, 3A, LED voltage/current readout
 
 ### Total 12V Source Sizing
 
