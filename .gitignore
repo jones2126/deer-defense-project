@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+venv/
+env/
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Models (large binary files — store separately)
+*.rknn
+*.onnx
+*.pt
+*.weights
+
+# Logs & data
+logs/
+*.log
+detections/
+captures/
+
+# Environment / secrets
+.env
+config.local.py
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
