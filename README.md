@@ -74,6 +74,10 @@ Edit `src/config.py` to set:
 - `COOLDOWN_SECONDS` — delay between triggers (default: `3`)
 - `BURST_DURATION` — water burst length in seconds (default: `0.5`)
 
+## System Flowchart
+
+See [docs/system-flowchart.md](docs/system-flowchart.md) for the full logic flow diagram (rendered in GitHub).
+
 ## Development Phases
 
 See [CLAUDE.md](CLAUDE.md) for the full 7-phase build plan, wiring details, and NPU acceleration guide.
