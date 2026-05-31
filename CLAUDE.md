@@ -55,54 +55,103 @@ An AI-powered, automated water gun turret that detects deer using computer visio
 
 ---
 
-## System Logic Flow
+## System Flowcharts
 
-```mermaid
-flowchart TD
-    A[Start: System Boot] --> B[Initialize Hardware & Software]
+Diagrams are split into focused pages for easy reading on GitHub:
 
-    subgraph Initialization
-        B --> B1[Load YOLO-World Model<br/>e.g. yolov8l-worldv2]
-        B --> B2[Open USB Camera Feed<br/>cv2.VideoCapture(0)]
-        B --> B3[Initialize Servos<br/>Pan + Tilt via PWM/PCA9685]
-        B --> B4[Initialize Trigger<br/>MOSFET or Relay GPIO]
-        B --> B5[Load Configuration<br/>- Target classes: ['deer']<br/>- Confidence threshold<br/>- Cooldown time<br/>- Servo angle limits]
-        B --> B6[Camera-to-Servo Calibration<br/>Map pixel coords to servo angles]
-    end
+- [Overview](docs/flowcharts/overview.md) — start here
+- [Initialization](docs/flowcharts/01-initialization.md)
+- [Detection and Targeting Loop](docs/flowcharts/02-detection-loop.md)
+- [Error Handling and Monitoring](docs/flowcharts/03-error-handling.md)
 
-    B --> C[Main Control Loop]
+---
 
-    subgraph Real-Time Detection & Targeting Loop
-        C --> D[Capture New Frame from Camera]
-        D --> E[Preprocess Frame<br/>Resize, normalize if needed]
-        E --> F[Run YOLO-World Inference<br/>model.predict(frame, text_prompt='deer')]
-        F --> G{Any Detections<br/>with conf > threshold?}
-        G -->|No| H[No Target<br/>Optional: Small delay]
-        H --> D
-        G -->|Yes| I[Select Target<br/>largest / closest / highest confidence]
-        I --> J[Calculate Bounding Box Center<br/>x = (x1 + x2)/2<br/>y = (y1 + y2)/2]
-        J --> K[Map Pixel Coordinates to Servo Angles]
-        K --> L[Apply Smoothing / PID Controller<br/>Optional: Prevent jitter]
-        L --> M[Move Servos<br/>pan_servo.angle = calculated_pan<br/>tilt_servo.angle = calculated_tilt]
-        M --> N{Target Still Centered?}
-        N -->|Yes| O[Fire Water Trigger<br/>GPIO high → MOSFET/Relay ON<br/>Short burst e.g. 500ms]
-        N -->|No| P[Re-aim if needed]
-        O --> Q[Cooldown Delay<br/>e.g. 2-5 seconds]
-        P --> D
-        Q --> D
-    end
+## How It Works
 
-    subgraph Error Handling & Monitoring
-        C -.-> R[Monitor System<br/>- Temperature<br/>- FPS / Latency<br/>- Water level optional]
-        R -.-> S[Log Detections & Actions<br/>Optional: Send alert]
-        S -.-> T[Handle Exceptions<br/>- Camera disconnect<br/>- Servo stall<br/>- Restart loop]
-    end
+1. A USB camera streams video continuously
+2. YOLO-World identifies deer in the frame
+3. Two servo motors aim the water gun at the target
+4. A short water burst is triggered via a MOSFET/relay circuit
+5. The system resets and keeps watching
 
-    style A fill:#4ade80
-    style C fill:#60a5fa
-    style G fill:#fbbf24
-    style O fill:#f87171
+Runs 24/7, fully local, no cloud required.
+
+---
+
+## Hardware Summary
+
+| Component | Details |
+|---|---|
+| Compute board | Orange Pi 5 (RK3588 NPU, 6 TOPS) |
+| Camera | USB 1080p webcam (UVC-compatible) |
+| Servos | 2× MG90S or MG996R (pan + tilt) |
+| Servo driver | PCA9685 I²C PWM driver (optional) |
+| Trigger | IRLZ44N MOSFET or 5V relay module |
+| Water gun | Disassembled battery-powered toy water gun |
+| OS | Armbian on Orange Pi 5 |
+
+---
+
+## Repository Structure
+
 ```
+deer-defense-project/
+├── src/                  # Python source code
+│   ├── main.py           # Entry point — detection + control loop
+│   ├── detector.py       # YOLO-World inference wrapper
+│   ├── servo_control.py  # Pan/tilt servo control
+│   ├── trigger.py        # Water gun trigger (MOSFET/relay)
+│   └── config.py         # Configuration (target class, thresholds, etc.)
+├── docs/
+│   └── flowcharts/       # System diagrams (overview + detail views)
+├── hardware/             # Wiring diagrams, BOM, mechanical notes
+├── tests/                # Unit and integration tests
+├── CLAUDE.md             # Full project reference (this file)
+├── README.md
+└── .gitignore
+```
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+```bash
+sudo apt update && sudo apt install python3 python3-pip python3-venv git -y
+```
+
+### Install dependencies
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install opencv-python numpy ultralytics
+```
+
+### Run (CPU/prototype mode)
+
+```bash
+python3 src/main.py
+```
+
+### Configuration
+
+Edit `src/config.py` to set:
+- `TARGET_CLASS` — text prompt for YOLO-World (default: `"deer"`)
+- `CONFIDENCE_THRESHOLD` — detection confidence cutoff (default: `0.5`)
+- `COOLDOWN_SECONDS` — delay between triggers (default: `3`)
+- `BURST_DURATION` — water burst length in seconds (default: `0.5`)
+
+---
+
+## Contributing
+
+Pull requests welcome. Open an issue first to discuss significant changes.
+
+## License
+
+MIT
 
 ---
 
