@@ -32,7 +32,7 @@ An AI-powered, automated water gun turret that detects deer using computer visio
 | Water gun (×2) | StimuVariety Electric Water Gun — USB rechargeable, DC motor pump ⚠️ untested | [Amazon](https://www.amazon.com/gp/product/B0GGB86N1X) | $40 (2-pack) |
 | Servo motors (×4) | MG996R metal gear, 9.4 kg·cm torque, pan + tilt | [Amazon](https://www.amazon.com/4-Pack-MG996R-Torque-Digital-Helicopter/dp/B07MFK266B) | $18 (4-pack) |
 | Pan-tilt bracket (×2) | DiGiYes aluminum alloy, MG996R compatible, includes U+L mounts ⚠️ untested | [Amazon](https://www.amazon.com/DiGiYes-Aluminum-U-Shaped-L-Shaped-Steering/dp/B0CP7FHC6L) | ~$11 (2-pack) |
-| PCA9685 servo driver | 16-channel I²C PWM driver — reduces jitter, frees GPIO (optional but recommended) | — | ~$8 |
+| PCA9685 servo driver (×2) | HUAREW 16-channel I²C PWM driver — reduces jitter, frees GPIO (optional but recommended) | [Amazon](https://www.amazon.com/HUAREW-PCA9685-Interface-Compatible-Raspberry/dp/B0CRV3MK14) | $13 (2-pack) |
 | Trigger circuit | IRLZ44N MOSFET + 10kΩ/220Ω resistors, or 5V relay module | — | ~$5 |
 | Buck converter (×2) | DROK 12V→5V 5A USB — one per rail ⚠️ untested | [Amazon](https://www.amazon.com/Converter-DROK-Regulator-Inverter-Transformer/dp/B01NALDSJ0) | $15 (2-pack) |
 | Misc electronics | Jumper wires, breadboard, Dupont connectors, heat shrink, fuse | — | ~$15 |
