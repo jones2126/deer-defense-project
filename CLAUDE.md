@@ -36,7 +36,7 @@ An AI-powered, automated water gun turret that detects deer using computer visio
 - Jumper wires, breadboard/perfboard, Dupont connectors, heat shrink
 
 > ⚠️ **Untested — requires further research and testing before purchase:**
-> [Liberty Imports Motorized Automatic Electric Water Gun (AK-47 style)](https://www.amazon.com/Liberty-Imports-Operated-Motorized-Automatic/dp/B07G4LKXVR) — battery-operated DC motor pump, simple circuit to tap into with a MOSFET/relay, similar style to the one used in the original pigeon defense project
+> [StimuVariety Electric Water Gun](https://www.amazon.com/gp/product/B0GGB86N1X) — selected as the target model for this project; verify battery type, pump circuit accessibility, and trigger mechanism before purchasing
 
 ### 4. Mechanical & Mounting
 - 3D-printed or custom turret mount (holds camera + servos + water gun)
