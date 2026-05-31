@@ -1,12 +1,14 @@
+import json
+import numpy as np
 import config
 
 # Smoothing factor: 0.0 = instant snap, 1.0 = never moves.
-# 0.4 works well to reduce jitter without sluggish tracking.
 SMOOTHING = 0.4
 
 _pan_angle = float(config.PAN_CENTER)
 _tilt_angle = float(config.TILT_CENTER)
 _pca = None
+_homography = None      # Set by load_calibration(); None = use linear fallback
 
 
 def init():
@@ -18,6 +20,24 @@ def init():
     _pca = PCA9685(i2c, address=config.PCA9685_ADDRESS)
     _pca.frequency = 50
     move_to(config.PAN_CENTER, config.TILT_CENTER)
+
+
+def load_calibration(path=None):
+    """Load homography matrix from calibration.json. Returns True on success."""
+    global _homography
+    path = path or config.CALIBRATION_FILE
+    try:
+        with open(path) as f:
+            data = json.load(f)
+        _homography = np.array(data["homography"], dtype=np.float64)
+        return True
+    except (FileNotFoundError, KeyError):
+        return False
+
+
+def get_angles():
+    """Return current (pan, tilt) angles in degrees."""
+    return _pan_angle, _tilt_angle
 
 
 def _clamp(value, lo, hi):
@@ -44,14 +64,24 @@ def move_to(pan, tilt):
 
 
 def aim_at_pixel(px, py):
-    """Smoothly move servos to point at pixel (px, py) in the camera frame."""
-    pan_target = config.PAN_CENTER + (px - config.FRAME_WIDTH / 2) * (
-        (config.PAN_MAX - config.PAN_MIN) / config.FRAME_WIDTH
-    )
-    tilt_target = config.TILT_CENTER + (py - config.FRAME_HEIGHT / 2) * (
-        (config.TILT_MAX - config.TILT_MIN) / config.FRAME_HEIGHT
-    )
-    new_pan = _pan_angle + (1 - SMOOTHING) * (pan_target - _pan_angle)
+    """Move servos to point at camera pixel (px, py).
+
+    Uses calibration homography when available; falls back to linear mapping
+    when no calibration file has been loaded (e.g. during initial setup).
+    """
+    if _homography is not None:
+        src = np.array([[[float(px), float(py)]]], dtype=np.float64)
+        dst = cv2.perspectiveTransform(src, _homography)
+        pan_target, tilt_target = dst[0][0]
+    else:
+        pan_target = config.PAN_CENTER + (px - config.FRAME_WIDTH / 2) * (
+            (config.PAN_MAX - config.PAN_MIN) / config.FRAME_WIDTH
+        )
+        tilt_target = config.TILT_CENTER + (py - config.FRAME_HEIGHT / 2) * (
+            (config.TILT_MAX - config.TILT_MIN) / config.FRAME_HEIGHT
+        )
+
+    new_pan  = _pan_angle  + (1 - SMOOTHING) * (pan_target  - _pan_angle)
     new_tilt = _tilt_angle + (1 - SMOOTHING) * (tilt_target - _tilt_angle)
     move_to(new_pan, new_tilt)
 
@@ -64,3 +94,11 @@ def deinit():
     if _pca:
         center()
         _pca.deinit()
+
+
+# cv2 imported here to avoid a hard dependency at module load time on systems
+# where OpenCV is not yet installed (e.g. during pip install).
+try:
+    import cv2
+except ImportError:
+    cv2 = None

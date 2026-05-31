@@ -2,6 +2,9 @@
 opencv-python
 ultralytics
 
+# AprilTag detection for calibration
+pupil-apriltags
+
 # Servo driver (PCA9685 via I2C)
 adafruit-circuitpython-pca9685
 adafruit-blinka

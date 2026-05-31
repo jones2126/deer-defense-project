@@ -1,4 +1,6 @@
 import time
+import cv2
+import numpy as np
 import config
 
 _gpio_ready = False
@@ -32,8 +34,17 @@ def deinit():
         GPIO.cleanup(config.TRIGGER_PIN)
 
 
-def in_fire_zone(px, py):
-    """Return True if pixel (px, py) falls within the protected garden zone."""
+def in_fire_zone(px, py, polygon=None):
+    """Return True if pixel (px, py) is within the fire zone.
+
+    When a calibrated polygon is provided (list of [x,y] points from
+    calibrate.py), uses cv2.pointPolygonTest for accurate boundary checking.
+    Falls back to the static rectangular zone from config when not calibrated.
+    """
+    if polygon is not None:
+        pts = np.array(polygon, dtype=np.float32)
+        return cv2.pointPolygonTest(pts, (float(px), float(py)), False) >= 0
+    # Static fallback
     x_frac = px / config.FRAME_WIDTH
     y_frac = py / config.FRAME_HEIGHT
     return (
