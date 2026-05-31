@@ -1,0 +1,15 @@
+# Core vision and AI
+opencv-python
+ultralytics
+
+# Servo driver (PCA9685 via I2C)
+adafruit-circuitpython-pca9685
+adafruit-blinka
+
+# GPIO (Orange Pi 5)
+# Install manually if not available via pip:
+# https://github.com/rm-hull/OPi.GPIO
+OPi.GPIO
+
+# NumPy (pulled in by ultralytics but listed explicitly)
+numpy
