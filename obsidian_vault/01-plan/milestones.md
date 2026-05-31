@@ -36,18 +36,27 @@ Edit `orange-pi-code/config.py` to set:
 
 ### OS Image — Setting Up the SD Card
 
-**Recommended OS: Armbian for Orange Pi 5**
+**Recommended OS: Armbian minimal for Orange Pi 5**
 
-1. Download the latest Armbian image for the Orange Pi 5 from:
+Armbian is preferred over the official Orange Pi OS for this project because:
+- Active community and excellent documentation
+- `armbian-config` tool simplifies Wi-Fi, I2C, and GPIO setup
+- Minimal image leaves maximum RAM free for YOLO-World inference
+- Kernel 6.1.115 (vendor) has the best NPU driver support
+- Newer Python and pip packages out of the box
+
+1. Download the Armbian image for the Orange Pi 5 from:
    https://www.armbian.com/orange-pi-5/
-   Choose the **Armbian Bookworm** (Debian 12) minimal or CLI image.
+   Choose the **Armbian Trixie minimal** image (vendor kernel).
 
-2. Alternatively, use the official Orange Pi OS image from:
-   http://www.orangepi.org/html/hardWare/computerAndMicrocontrollers/service-and-support/Orange-pi-5.html
+2. *(Alternative)* Official Orange Pi OS images are available at:
+   https://drive.google.com/drive/folders/1F2uc8v_EQnvsNrevDihwoymOJlFgM-dZ
+   If using the official images, choose `Orangepi5_1.2.2_debian_bookworm_server_linux6.1.99.7z` —
+   **server variant only** (not desktop/Xfce, which wastes ~400MB RAM on a GUI).
 
 3. Flash the image to the 32GB SD card using **Balena Etcher** (recommended, free):
    https://etcher.balena.io/
-   - Open Etcher, select the downloaded `.img.xz` file
+   - Open Etcher, select the downloaded `.img.xz` or `.7z` file
    - Select the SD card as the target
    - Click Flash — takes 3–5 minutes
 
