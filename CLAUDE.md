@@ -24,45 +24,25 @@ An AI-powered, automated water gun turret that detects deer using computer visio
 
 ## Bill of Materials (BOM)
 
-**Estimated total cost**: $150–350 USD
+| Component | Details | Link | Cost |
+|---|---|---|---|
+| Orange Pi 5 4GB | RK3588S NPU (6 TOPS), 8-core CPU, 26-pin GPIO | [Amazon](https://www.amazon.com/Orange-Pi-Frequency-Development-Android12/dp/B0BN16ZLXB) | $125 |
+| Camera | Arducam 1080P, USB 2.0, automatic IR-cut day/night switching, Linux UVC | [Amazon](https://www.amazon.com/Arducam-Computer-Automatic-Switching-All-Day/dp/B0829HZ3Q7) | $35 |
+| SD card | 32GB+ Class 10/A2 for OS | — | ~$10 |
+| Water gun (×2) | StimuVariety Electric Water Gun — USB rechargeable, DC motor pump ⚠️ untested | [Amazon](https://www.amazon.com/gp/product/B0GGB86N1X) | $40 (2-pack) |
+| Servo motors (×2) | MG90S or MG996R metal gear, pan + tilt | — | ~$12 |
+| Pan-tilt bracket | Servo mount kit or 3D-print from Thingiverse | — | ~$10 |
+| PCA9685 servo driver | 16-channel I²C PWM driver — reduces jitter, frees GPIO (optional but recommended) | — | ~$8 |
+| Trigger circuit | IRLZ44N MOSFET + 10kΩ/220Ω resistors, or 5V relay module | — | ~$5 |
+| Buck converter (×2) | DROK 12V→5V 5A USB — one per rail ⚠️ untested | [Amazon](https://www.amazon.com/Converter-DROK-Regulator-Inverter-Transformer/dp/B01NALDSJ0) | $15 (2-pack) |
+| Misc electronics | Jumper wires, breadboard, Dupont connectors, heat shrink, fuse | — | ~$15 |
+| Enclosure & mounting | Weatherproof box for Orange Pi, cable ties, silicone sealant, screws | — | ~$15–30 |
+| **Total (estimated)** | | | **~$290** |
 
-### 1. Computing & Vision
-- **Orange Pi 5 4GB** (RK3588S NPU, 6 TOPS) — [Amazon listing](https://www.amazon.com/Orange-Pi-Frequency-Development-Android12/dp/B0BN16ZLXB)
-- 5V/4A+ USB-C power supply (dedicated — do not share with servos)
-- **USB Camera** — Logitech C920/C270 or generic wide-angle 1080p (UVC-compatible)
-- SD card (32GB+ Class 10/A2) or eMMC module
-
-### 2. Actuation (Aiming)
-- **2× Servo motors**: MG90S or MG996R (metal gear recommended for outdoor use)
-- Pan-tilt bracket / servo mount kit (or 3D-print from Thingiverse/Printables)
-- Optional: **PCA9685** 16-channel PWM servo driver (I²C) — reduces jitter, frees GPIO pins
-
-### 3. Water Gun & Triggering
-- **Battery-powered electric water gun** (cheap toy) — disassemble to access pump circuit; look for one with a simple DC motor pump triggered by holding the button (not a manual pump)
-- **IRLZ44N** N-channel logic-level MOSFET + resistors (10kΩ pull-down, ~220Ω gate resistor)
-- Alternative: 5V relay module (simpler/safer isolation)
-- Jumper wires, breadboard/perfboard, Dupont connectors, heat shrink
-
-> ⚠️ **Untested — requires further research and testing before purchase:**
-> [StimuVariety Electric Water Gun](https://www.amazon.com/gp/product/B0GGB86N1X) — selected as the target model for this project; verify battery type, pump circuit accessibility, and trigger mechanism before purchasing
-
-### 4. Mechanical & Mounting
-- 3D-printed or custom turret mount (holds camera + servos + water gun)
-- Base/platform (wood, acrylic, or repurposed mount)
-- Weatherproof enclosure for Orange Pi + electronics (IP-rated if possible)
-- Cable management, zip ties, hot glue/epoxy, screws, silicone sealant
-
-### 5. Power & Misc
-- Separate 5V/6V battery pack or regulated supply for servos + water gun pump
-- Do **not** power servos from the Orange Pi 5V rail under load
-- Multimeter, soldering iron, wire strippers
-- Optional: Small fan + heatsink for Orange Pi under sustained NPU load
-
-**Rough cost breakdown**:
-- Orange Pi 5 + PSU + camera: ~$80–120
-- Servos + mounts + water gun: ~$30–60
-- Electronics/misc: ~$20–40
-- Enclosure/3D printing: variable
+**Notes:**
+- Water gun: look for a DC motor pump triggered by holding a button — easy to wire a MOSFET/relay in parallel with the trigger contacts
+- Enclosure: IP65-rated project box recommended for outdoor use; add desiccant inside
+- OS: Armbian (recommended for RK3588S) or official Orange Pi OS
 
 ---
 
@@ -146,20 +126,6 @@ A **12V/6A (72W) power supply or battery** is sufficient. If running from a car 
 5. The system resets and keeps watching
 
 Runs 24/7, fully local, no cloud required.
-
----
-
-## Hardware Summary
-
-| Component | Details |
-|---|---|
-| Compute board | Orange Pi 5 (RK3588 NPU, 6 TOPS) |
-| Camera | USB 1080p webcam (UVC-compatible) |
-| Servos | 2× MG90S or MG996R (pan + tilt) |
-| Servo driver | PCA9685 I²C PWM driver (optional) |
-| Trigger | IRLZ44N MOSFET or 5V relay module |
-| Water gun | Disassembled battery-powered toy water gun |
-| OS | Armbian on Orange Pi 5 |
 
 ---
 
