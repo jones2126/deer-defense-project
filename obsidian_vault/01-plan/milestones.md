@@ -116,6 +116,21 @@ See [Orange Pi 5 Overview](../02-design/orange-pi-5/overview.md) for the detecti
 3. Handle edge cases: multiple deer, false positives, low light, night detection
 4. Add config file for target class (`"deer"`, `"rabbit"`, `"groundhog"`, etc.)
 
+### Phase 5b: Camera Calibration (1–2 hours)
+
+The camera is mounted in a fixed position separate from the turret. Calibration maps camera pixel coordinates to servo angles and defines the fire zone boundary at your water gun's maximum range (~18 ft).
+
+See the full step-by-step guide: [Camera Calibration Guide](../02-design/camera/calibration-guide.md)
+
+**Quick summary:**
+1. Print 8–10 AprilTags (`tag36h11` family) at 15 cm wide
+2. Place tags around the garden at varied distances — at least 2 at ~18 ft
+3. Run `python3 orange-pi-code/calibrate.py`
+4. Aim the turret at each tag with arrow keys, press Space to record
+5. Press C to save `calibration.json` (6+ points required)
+
+Re-run calibrate.py any time the camera or turret is repositioned.
+
 ### Phase 6: Enclosure, Weatherproofing & Installation (2–4 days)
 1. Mount everything securely near the tomato bed
 2. Waterproof electronics (conformal coating, sealed enclosure, desiccant)
