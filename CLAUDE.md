@@ -19,8 +19,8 @@ An AI-powered, automated water gun turret that detects deer using computer visio
 **Estimated total cost**: $150–350 USD
 
 ### 1. Computing & Vision
-- **Orange Pi 5** (or 5 Plus/Pro) — RK3588 NPU (6 TOPS)
-- 5V/4A+ USB-C or barrel power supply (PoE hat optional)
+- **Orange Pi 5 4GB** (RK3588S NPU, 6 TOPS) — [Amazon listing](https://www.amazon.com/Orange-Pi-Frequency-Development-Android12/dp/B0BN16ZLXB)
+- 5V/4A+ USB-C power supply (dedicated — do not share with servos)
 - **USB Camera** — Logitech C920/C270 or generic wide-angle 1080p (UVC-compatible)
 - SD card (32GB+ Class 10/A2) or eMMC module
 
@@ -63,6 +63,65 @@ Diagrams are split into focused pages for easy reading on GitHub:
 - [Initialization](docs/flowcharts/01-initialization.md)
 - [Detection and Targeting Loop](docs/flowcharts/02-detection-loop.md)
 - [Error Handling and Monitoring](docs/flowcharts/03-error-handling.md)
+
+---
+
+## Power Requirements & Buck Converter Guide
+
+### Per-Component Power Budget
+
+| Component | Voltage | Typical Current | Peak Current |
+|---|---|---|---|
+| Orange Pi 5 (idle) | 5V | 0.8A (4W) | — |
+| Orange Pi 5 (NPU load) | 5V | 2.5–3A (12–15W) | 4A |
+| MG996R servo × 2 | 5–6V | 0.5A each (5W total) | 2.5A each (stall) |
+| MG90S servo × 2 | 4.8–6V | 0.1A each (1W total) | 0.5A each (stall) |
+| Water gun pump | 4.5–6V | 0.5–1A (3–5W) | 2A |
+| USB camera | 5V (USB) | 0.5A | 0.5A |
+| PCA9685 driver | 3.3–5V | 0.01A | — |
+
+**Use two separate power rails.** Servos and pumps generate electrical noise and current spikes that can crash the Orange Pi if they share a supply.
+
+### Rail 1 — Orange Pi 5 (5V/4A minimum)
+
+The simplest option is a quality **5V/4A USB-C wall adapter** plugged directly into the board. If you need to run everything from a single 12V source (solar, car battery, or 12V supply), use a dedicated buck converter for this rail:
+
+- Output: **5V @ 5A**
+- Input: 12V
+- Wattage draw from 12V source: ~25W → ~2.1A @ 12V
+- Recommended module: **DROK DC-DC Buck Converter 5A** (LM2596 or XL4005 based, ~$10–12)
+  - Must output clean, stable 5V — avoid ultra-cheap modules for this rail
+  - Use a USB-C cable or barrel connector adapter to connect to the Orange Pi
+
+### Rail 2 — Servos + Water Gun Pump (5–6V/5A)
+
+- Output: **5V or 6V @ 5A** (adjustable)
+- Input: 12V
+- Wattage draw from 12V source: ~30W → ~2.5A @ 12V
+- Recommended module: **LM2596 adjustable buck converter** (~$8–10 for a 3-pack on Amazon)
+  - Set output to 5V for MG90S servos or 6V for MG996R servos
+  - 3A continuous rating is sufficient for two servos + pump under normal (non-stall) conditions
+  - Add a 5A fuse on this rail as protection
+
+### Total 12V Source Sizing
+
+| Rail | Draw from 12V |
+|---|---|
+| Orange Pi 5 rail | ~2.1A |
+| Servos + pump rail | ~2.5A |
+| Margin (20%) | ~1A |
+| **Total** | **~5.5–6A @ 12V (~65–70W)** |
+
+A **12V/6A (72W) power supply or battery** is sufficient. If running from a car battery or solar setup, this is a very light load.
+
+### Wiring Diagram (simplified)
+
+```
+12V Source
+   ├── Buck Converter #1 → 5V/5A → USB-C → Orange Pi 5
+   └── Buck Converter #2 → 5V or 6V/5A → Servos + Water Gun Pump
+                                         └── PCA9685 (shares this rail)
+```
 
 ---
 
