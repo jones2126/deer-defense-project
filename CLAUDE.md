@@ -72,6 +72,7 @@ deer-defense-project/
 │       ├── pan-tilt-system/
 │       ├── trigger-system/
 │       └── power-system/         # Power budget, buck converter wiring
+├── orange-pi-code/               # Python source code for the Orange Pi 5
 ├── CLAUDE.md                     # Project overview, BOM, how it works
 ├── README.md
 └── .gitignore
