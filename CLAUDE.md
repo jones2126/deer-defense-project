@@ -14,6 +14,14 @@ An AI-powered, automated water gun turret that detects deer using computer visio
 
 ---
 
+## Concept Image
+
+![Deer Defense Turret Concept](docs/concept-image.png)
+
+*AI-generated concept image of the assembled deer defense turret*
+
+---
+
 ## Bill of Materials (BOM)
 
 **Estimated total cost**: $150–350 USD
