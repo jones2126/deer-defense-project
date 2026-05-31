@@ -21,13 +21,9 @@ Calibration also defines two range-limiting safeguards:
 ### AprilTags
 AprilTags are printed square markers that the camera detects with sub-pixel accuracy and can estimate the distance to.
 
-1. Download the `tag36h11` family image set from:
-   https://github.com/AprilRobotics/apriltag-imgs/tree/master/tag36h11
+See the full printing and preparation instructions: [AprilTag Printing Guide](apriltag-printing-guide.md)
 
-2. Print **8–10 tags** at exactly **15 cm (6 inches) wide** on plain white paper.
-   - Use a laser printer if possible — inkjet can blur the edges
-   - Each tag has a unique ID (0, 1, 2, ...) — print different IDs so the script can tell them apart
-   - Attach each printed tag to a flat rigid surface (cardboard, foam board, stake)
+**Quick summary:** Print tags `00000`–`00009` from the `tag36h11` family at exactly **15 cm wide** on plain white paper (laser printer preferred). Mount on rigid boards attached to garden stakes.
 
 ### Placement
 - Place tags at **varied positions and distances** across the garden area you want to protect
