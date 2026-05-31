@@ -13,13 +13,13 @@ sudo apt update && sudo apt install python3 python3-pip python3-venv git -y
 ```bash
 python3 -m venv venv
 source venv/bin/activate
-pip install opencv-python numpy ultralytics
+pip install -r orange-pi-code/requirements.txt
 ```
 
 ### Run (CPU/prototype mode)
 
 ```bash
-python3 src/main.py
+python3 orange-pi-code/main.py
 ```
 
 ### Configuration
