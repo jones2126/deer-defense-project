@@ -28,11 +28,11 @@ An AI-powered, automated water gun turret that detects deer using computer visio
 |---|---|---|---|
 | Orange Pi 5 4GB | RK3588S NPU (6 TOPS), 8-core CPU, 26-pin GPIO | [Amazon](https://www.amazon.com/Orange-Pi-Frequency-Development-Android12/dp/B0BN16ZLXB) | $125 |
 | Camera | Arducam 1080P, USB 2.0, automatic IR-cut day/night switching, Linux UVC | [Amazon](https://www.amazon.com/Arducam-Computer-Automatic-Switching-All-Day/dp/B0829HZ3Q7) | $35 |
-| SD card (×3) | PNY Elite 32GB microSDHC Class 10 | [Amazon](https://www.amazon.com/PNY-Elite-microSDHC-Memory-3-Pack/dp/B07YXJM282) | $34 (3-pack) |
-| Water gun (×2) | StimuVariety Electric Water Gun — USB rechargeable, DC motor pump ⚠️ untested | [Amazon](https://www.amazon.com/gp/product/B0GGB86N1X) | $40 (2-pack) |
+| SD card | PNY Elite 32GB microSDHC Class 10 | [Amazon](https://www.amazon.com/PNY-Elite-microSDHC-Memory-3-Pack/dp/B07YXJM282) | $34 (3-pack) |
+| Water gun | StimuVariety Electric Water Gun — USB rechargeable, DC motor pump ⚠️ untested | [Amazon](https://www.amazon.com/gp/product/B0GGB86N1X) | $40 (2-pack) |
 | Servo motors (×4) | MG996R metal gear, 9.4 kg·cm torque, pan + tilt | [Amazon](https://www.amazon.com/4-Pack-MG996R-Torque-Digital-Helicopter/dp/B07MFK266B) | $18 (4-pack) |
-| Pan-tilt bracket (×2) | DiGiYes aluminum alloy, MG996R compatible, includes U+L mounts ⚠️ untested | [Amazon](https://www.amazon.com/DiGiYes-Aluminum-U-Shaped-L-Shaped-Steering/dp/B0CP7FHC6L) | ~$11 (2-pack) |
-| PCA9685 servo driver (×2) | HUAREW 16-channel I²C PWM driver — reduces jitter, frees GPIO (optional but recommended) | [Amazon](https://www.amazon.com/HUAREW-PCA9685-Interface-Compatible-Raspberry/dp/B0CRV3MK14) | $13 (2-pack) |
+| Pan-tilt bracket | DiGiYes aluminum alloy, MG996R compatible, includes U+L mounts ⚠️ untested | [Amazon](https://www.amazon.com/DiGiYes-Aluminum-U-Shaped-L-Shaped-Steering/dp/B0CP7FHC6L) | ~$11 (2-pack) |
+| PCA9685 servo driver | HUAREW 16-channel I²C PWM driver — reduces jitter, frees GPIO (optional but recommended) | [Amazon](https://www.amazon.com/HUAREW-PCA9685-Interface-Compatible-Raspberry/dp/B0CRV3MK14) | $13 (2-pack) |
 | Trigger circuit | IRLZ44N MOSFET + 10kΩ/220Ω resistors, or 5V relay module | — | ~$5 |
 | Buck converter (×2) | DROK 12V→5V 5A USB — one per rail ⚠️ untested | [Amazon](https://www.amazon.com/Converter-DROK-Regulator-Inverter-Transformer/dp/B01NALDSJ0) | $15 (2-pack) |
 | Misc electronics | Jumper wires, breadboard, Dupont connectors, heat shrink, fuse | — | ~$15 |
