@@ -30,7 +30,7 @@ An AI-powered, automated water gun turret that detects deer using computer visio
 | Camera | Arducam 1080P, USB 2.0, automatic IR-cut day/night switching, Linux UVC | [Amazon](https://www.amazon.com/Arducam-Computer-Automatic-Switching-All-Day/dp/B0829HZ3Q7) | $35 |
 | SD card | 32GB+ Class 10/A2 for OS | — | ~$10 |
 | Water gun (×2) | StimuVariety Electric Water Gun — USB rechargeable, DC motor pump ⚠️ untested | [Amazon](https://www.amazon.com/gp/product/B0GGB86N1X) | $40 (2-pack) |
-| Servo motors (×2) | MG90S or MG996R metal gear, pan + tilt | — | ~$12 |
+| Servo motors (×2) | MG996R metal gear, 9.4 kg·cm torque, pan + tilt | [Amazon](https://www.amazon.com/4-Pack-MG996R-Torque-Digital-Helicopter/dp/B07MFK266B) | ~$12 |
 | Pan-tilt bracket | Servo mount kit or 3D-print from Thingiverse | — | ~$10 |
 | PCA9685 servo driver | 16-channel I²C PWM driver — reduces jitter, frees GPIO (optional but recommended) | — | ~$8 |
 | Trigger circuit | IRLZ44N MOSFET + 10kΩ/220Ω resistors, or 5V relay module | — | ~$5 |
