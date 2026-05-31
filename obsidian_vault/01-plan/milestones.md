@@ -24,11 +24,39 @@ python3 orange-pi-code/main.py
 
 ### Configuration
 
-Edit `src/config.py` to set:
+Edit `orange-pi-code/config.py` to set:
 - `TARGET_CLASS` — text prompt for YOLO-World (default: `"deer"`)
 - `CONFIDENCE_THRESHOLD` — detection confidence cutoff (default: `0.5`)
 - `COOLDOWN_SECONDS` — delay between triggers (default: `3`)
 - `BURST_DURATION` — water burst length in seconds (default: `0.5`)
+- `TRIGGER_PIN` — GPIO pin number connected to the MOSFET/relay gate (default: `18`)
+- `FIRE_ZONE_*` — fractions of the frame defining the protected garden area
+
+---
+
+### OS Image — Setting Up the SD Card
+
+**Recommended OS: Armbian for Orange Pi 5**
+
+1. Download the latest Armbian image for the Orange Pi 5 from:
+   https://www.armbian.com/orange-pi-5/
+   Choose the **Armbian Bookworm** (Debian 12) minimal or CLI image.
+
+2. Alternatively, use the official Orange Pi OS image from:
+   http://www.orangepi.org/html/hardWare/computerAndMicrocontrollers/service-and-support/Orange-pi-5.html
+
+3. Flash the image to the 32GB SD card using **Balena Etcher** (recommended, free):
+   https://etcher.balena.io/
+   - Open Etcher, select the downloaded `.img.xz` file
+   - Select the SD card as the target
+   - Click Flash — takes 3–5 minutes
+
+4. Insert the SD card into the Orange Pi 5, connect a monitor and keyboard for first boot, then follow the on-screen setup to set a root password and create a user account.
+
+5. After first boot, update the system:
+   ```bash
+   sudo apt update && sudo apt upgrade -y
+   ```
 
 ---
 
