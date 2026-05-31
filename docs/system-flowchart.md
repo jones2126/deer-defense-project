@@ -2,43 +2,43 @@
 
 ```mermaid
 flowchart TD
-    A[Start: System Boot] --> B[Initialize Hardware & Software]
+    A([Start: System Boot]) --> B[Initialize Hardware and Software]
 
     subgraph Initialization
-        B --> B1[Load YOLO-World Model<br/>e.g. yolov8l-worldv2]
-        B --> B2[Open USB Camera Feed<br/>cv2.VideoCapture(0)]
-        B --> B3[Initialize Servos<br/>Pan + Tilt via PWM/PCA9685]
-        B --> B4[Initialize Trigger<br/>MOSFET or Relay GPIO]
-        B --> B5[Load Configuration<br/>- Target classes: 'deer'<br/>- Confidence threshold<br/>- Cooldown time<br/>- Servo angle limits]
-        B --> B6[Camera-to-Servo Calibration<br/>Map pixel coords to servo angles]
+        B --> B1[Load YOLO-World Model]
+        B --> B2[Open USB Camera Feed]
+        B --> B3[Initialize Pan and Tilt Servos]
+        B --> B4[Initialize Water Gun Trigger]
+        B --> B5[Load Config: target class, confidence, cooldown, angle limits]
+        B --> B6[Calibrate Camera-to-Servo Mapping]
     end
 
-    B --> C[Main Control Loop]
+    B --> C([Main Control Loop])
 
-    subgraph Real-Time Detection & Targeting Loop
-        C --> D[Capture New Frame from Camera]
-        D --> E[Preprocess Frame<br/>Resize, normalize if needed]
-        E --> F[Run YOLO-World Inference<br/>model.predict(frame, text_prompt='deer')]
-        F --> G{Any Detections<br/>with conf > threshold?}
-        G -->|No| H[No Target<br/>Optional: Small delay]
+    subgraph Detection and Targeting Loop
+        C --> D[Capture Frame from Camera]
+        D --> E[Preprocess Frame]
+        E --> F[Run YOLO-World Inference with prompt: deer]
+        F --> G{Detection confidence above threshold?}
+        G -->|No| H[No Target - wait]
         H --> D
-        G -->|Yes| I[Select Target<br/>largest / closest / highest confidence]
-        I --> J[Calculate Bounding Box Center<br/>x = (x1 + x2)/2<br/>y = (y1 + y2)/2]
+        G -->|Yes| I[Select Best Target]
+        I --> J[Calculate Bounding Box Center]
         J --> K[Map Pixel Coordinates to Servo Angles]
-        K --> L[Apply Smoothing / PID Controller<br/>Optional: Prevent jitter]
-        L --> M[Move Servos<br/>pan_servo.angle = calculated_pan<br/>tilt_servo.angle = calculated_tilt]
-        M --> N{Target Still Centered?}
-        N -->|Yes| O[Fire Water Trigger<br/>GPIO high → MOSFET/Relay ON<br/>Short burst e.g. 500ms]
-        N -->|No| P[Re-aim if needed]
-        O --> Q[Cooldown Delay<br/>e.g. 2-5 seconds]
+        K --> L[Apply Smoothing or PID]
+        L --> M[Move Servos to Aim]
+        M --> N{Target centered?}
+        N -->|No| P[Re-aim]
         P --> D
+        N -->|Yes| O[Fire Water Gun - short burst]
+        O --> Q[Cooldown Delay 2 to 5 seconds]
         Q --> D
     end
 
-    subgraph Error Handling & Monitoring
-        C -.-> R[Monitor System<br/>- Temperature<br/>- FPS / Latency<br/>- Water level optional]
-        R -.-> S[Log Detections & Actions<br/>Optional: Send alert]
-        S -.-> T[Handle Exceptions<br/>- Camera disconnect<br/>- Servo stall<br/>- Restart loop]
+    subgraph Error Handling and Monitoring
+        C -.-> R[Monitor Temp and FPS]
+        R -.-> S[Log Detections and Actions]
+        S -.-> T[Handle Exceptions and Restart]
     end
 
     style A fill:#4ade80
