@@ -74,6 +74,7 @@ deer-defense-project/
 │       └── power-system/         # Power budget, buck converter wiring
 ├── orange-pi-code/               # Python source code for the Orange Pi 5
 ├── CLAUDE.md                     # Project overview, BOM, how it works
+├── prompt-for-image.md           # AI image generation prompt for concept art
 ├── README.md
 └── .gitignore
 ```
