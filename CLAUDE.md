@@ -10,7 +10,7 @@ An AI-powered, automated water gun turret that detects deer using computer visio
 - **Detection**: YOLO-World v2 (open-vocabulary) — detects "deer" (or any text prompt: rabbit, groundhog, etc.)
 - **Hardware**: Orange Pi 5 (RK3588 NPU) + USB camera + 2 servos + disassembled electric water gun
 - **Inference**: Runs fully local/on-device, 24/7, no cloud needed
-- **Inspired by**: u/muxamilian's automated pigeon defense system (r/SideProject, April 2026)
+- **Inspired by**: [u/muxamilian's automated pigeon defense system](https://www.reddit.com/r/SideProject/comments/1s9ywir/automated_pigeon_defense_system/) (r/SideProject, April 2026)
 
 ---
 
@@ -18,7 +18,7 @@ An AI-powered, automated water gun turret that detects deer using computer visio
 
 ![Deer Defense Turret Concept](obsidian_vault/02-design/concept-image.png)
 
-*AI-generated concept image of the assembled deer defense turret*
+*AI-generated concept image of the assembled deer defense turret — [prompt link](prompt-for-image.md)*
 
 ---
 
