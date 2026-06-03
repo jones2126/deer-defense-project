@@ -5,16 +5,32 @@
 ### Prerequisites
 
 ```bash
-sudo apt update && sudo apt install python3 python3-pip python3-venv git -y
+sudo apt install python3-pip python3-opencv python3-pil git gpiod i2c-tools fswebcam v4l-utils -y
+```
+
+### Clone the project
+
+```bash
+git clone https://github.com/jones2126/deer-defense-project.git
+cd deer-defense-project
 ```
 
 ### Install dependencies
 
+No virtual environment needed — install system-wide (simpler for a dedicated SBC):
+
 ```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r orange-pi-code/requirements.txt
+pip3 install -r orange-pi-code/requirements.txt --break-system-packages
 ```
+
+### Verify Camera
+
+```bash
+fswebcam -r 1280x720 --png 0 test.jpg
+ls -l test.jpg
+```
+
+A working camera produces a file around 2–3 MB. Download via SFTP (e.g. FileZilla, `root@<ip>`) to check image quality. Cheap generic webcams may produce kernel warnings but often still work at lower resolutions.
 
 ### Run (CPU/prototype mode)
 
@@ -36,33 +52,46 @@ Edit `orange-pi-code/config.py` to set:
 
 ### OS Image — Setting Up the SD Card
 
-**Recommended OS: Armbian minimal for Orange Pi 5**
+**Recommended OS: Official Orange Pi image (Debian Bookworm server)**
 
-Armbian is preferred over the official Orange Pi OS for this project because:
-- Active community and excellent documentation
-- `armbian-config` tool simplifies Wi-Fi, I2C, and GPIO setup
-- Minimal image leaves maximum RAM free for YOLO-World inference
-- Kernel 6.1.115 (vendor) has the best NPU driver support
-- Newer Python and pip packages out of the box
+> **Note on the 4GB model:** Armbian Minimal (Trixie/Resolute, vendor kernel) failed to boot
+> multiple times — even after fresh flashes with Balena Etcher. This appears to be a known
+> issue on some Orange Pi 5 units, particularly the **4GB variant**. The official Orange Pi
+> image boots reliably and has full support for USB cameras, GPIO, and the RK3588S chipset.
+> Trade-off: slightly higher RAM usage than Armbian minimal, but acceptable for this project.
 
-1. Download the Armbian image for the Orange Pi 5 from:
-   https://www.armbian.com/orange-pi-5/
-   Choose the **Armbian Trixie minimal** image (vendor kernel).
-
-2. *(Alternative)* Official Orange Pi OS images are available at:
+1. Download the official image from Google Drive:
    https://drive.google.com/drive/folders/1F2uc8v_EQnvsNrevDihwoymOJlFgM-dZ
-   If using the official images, choose `Orangepi5_1.2.2_debian_bookworm_server_linux6.1.99.7z` —
-   **server variant only** (not desktop/Xfce, which wastes ~400MB RAM on a GUI).
+   Choose `Orangepi5_1.2.2_debian_bookworm_server_linux6.1.99.7z` (or the latest server
+   variant) — **server only**, not desktop/Xfce.
 
-3. Flash the image to the 32GB SD card using **Balena Etcher** (recommended, free):
+2. Flash the image to the 32GB SD card using **Balena Etcher** (recommended, free):
    https://etcher.balena.io/
-   - Open Etcher, select the downloaded `.img.xz` or `.7z` file
+   - Open Etcher, select the downloaded `.7z` file
    - Select the SD card as the target
    - Click Flash — takes 3–5 minutes
 
-4. Insert the SD card into the Orange Pi 5, connect a monitor and keyboard for first boot, then follow the on-screen setup to set a root password and create a user account.
+3. Insert the SD card into the Orange Pi 5, connect a monitor and keyboard for first boot.
 
-5. After first boot, update the system:
+4. Log in as `root` with password `orangepi` — **change it immediately:**
+   ```bash
+   passwd
+   ```
+
+5. Fix the package sources — the default Huawei mirror is often outdated:
+   ```bash
+   sudo cp /etc/apt/sources.list /etc/apt/sources.list.backup
+   cat <<EOF | sudo tee /etc/apt/sources.list
+   deb http://deb.debian.org/debian bookworm main contrib non-free non-free-firmware
+   deb http://deb.debian.org/debian bookworm-updates main contrib non-free non-free-firmware
+   deb http://deb.debian.org/debian bookworm-backports main contrib non-free non-free-firmware
+   deb http://security.debian.org/debian-security bookworm-security main contrib non-free non-free-firmware
+   EOF
+
+   sudo rm -f /etc/apt/sources.list.d/docker.list
+   ```
+
+6. Update the system:
    ```bash
    sudo apt update && sudo apt upgrade -y
    ```
@@ -91,10 +120,12 @@ Armbian is preferred over the official Orange Pi OS for this project because:
 **Recommended libraries**: `OPi.GPIO` or `gpiod` for GPIO; `adafruit-circuitpython-pca9685` if using the PWM driver.
 
 ### Phase 3: Software Environment Setup on Orange Pi 5 (1–2 days)
-1. Flash **Armbian** (recommended for RK3588) or official Orange Pi OS
-2. Update system, install: `python3`, `pip`, `git`, `opencv-python`, `numpy`
-3. Install GPIO libraries and test
-4. Set up a Python virtual environment
+1. Flash the **official Orange Pi Bookworm server image** (see OS setup section above)
+   — Armbian Minimal failed to boot on the 4GB model; use the official image
+2. Fix apt sources (replace Huawei mirror with `deb.debian.org`), then update
+3. Install system packages: `python3-pip python3-opencv python3-pil git gpiod i2c-tools fswebcam v4l-utils`
+4. Install Python packages system-wide: `pip3 install -r requirements.txt --break-system-packages`
+   — No virtualenv needed on a dedicated SBC
 
 ### Phase 4: AI Model — YOLO-World Inference (3–7 days)
 
