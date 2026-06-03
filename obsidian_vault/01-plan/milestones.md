@@ -119,15 +119,7 @@ Edit `orange-pi-code/config.py` to set:
 
 **Recommended libraries**: `OPi.GPIO` or `gpiod` for GPIO; `adafruit-circuitpython-pca9685` if using the PWM driver.
 
-### Phase 3: Software Environment Setup on Orange Pi 5 (1–2 days)
-1. Flash the **official Orange Pi Bookworm server image** (see OS setup section above)
-   — Armbian Minimal failed to boot on the 4GB model; use the official image
-2. Fix apt sources (replace Huawei mirror with `deb.debian.org`), then update
-3. Install system packages: `python3-pip python3-opencv python3-pil git gpiod i2c-tools fswebcam v4l-utils`
-4. Install Python packages system-wide: `pip3 install -r requirements.txt --break-system-packages`
-   — No virtualenv needed on a dedicated SBC
-
-### Phase 4: AI Model — YOLO-World Inference (3–7 days)
+### Phase 3: AI Model — YOLO-World Inference (3–7 days)
 
 Uses **yolo_world_v2l** (open-vocabulary — change target text without retraining).
 
@@ -138,7 +130,7 @@ Uses **yolo_world_v2l** (open-vocabulary — change target text without retraini
 
 See [Orange Pi 5 Overview](../02-design/orange-pi-5/overview.md) for the detection loop code and implementation notes.
 
-### Phase 5: Full Integration & Logic (3–5 days)
+### Phase 4: Full Integration & Logic (3–5 days)
 1. Combine detection + servo control + trigger
 2. Add logic:
    - Only trigger if target is inside the "garden zone" (bounding box region of frame)
@@ -147,7 +139,7 @@ See [Orange Pi 5 Overview](../02-design/orange-pi-5/overview.md) for the detecti
 3. Handle edge cases: multiple deer, false positives, low light, night detection
 4. Add config file for target class (`"deer"`, `"rabbit"`, `"groundhog"`, etc.)
 
-### Phase 5b: Camera Calibration (1–2 hours)
+### Phase 4b: Camera Calibration (1–2 hours)
 
 The camera is mounted in a fixed position separate from the turret. Calibration maps camera pixel coordinates to servo angles and defines the fire zone boundary at your water gun's maximum range (~18 ft).
 
@@ -162,14 +154,14 @@ See the full step-by-step guide: [Camera Calibration Guide](../02-design/camera/
 
 Re-run calibrate.py any time the camera or turret is repositioned.
 
-### Phase 6: Enclosure, Weatherproofing & Installation (2–4 days)
+### Phase 5: Enclosure, Weatherproofing & Installation (2–4 days)
 1. Mount everything securely near the tomato bed
 2. Waterproof electronics (conformal coating, sealed enclosure, desiccant)
 3. Route cables safely, protect from rain
 4. Long-term outdoor testing
 5. Add systemd service + watchdog for auto-restart
 
-### Phase 7: Testing, Tuning & Improvements
+### Phase 6: Testing, Tuning & Improvements
 - Daytime vs low-light performance (Arducam handles this automatically via IR-cut)
 - Servo speed and aiming accuracy
 - Water pressure and range of the water gun
