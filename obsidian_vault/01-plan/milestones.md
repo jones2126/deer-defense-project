@@ -2,54 +2,6 @@
 
 ## Getting Started
 
-### Prerequisites
-
-```bash
-sudo apt install python3-pip python3-opencv python3-pil git gpiod i2c-tools fswebcam v4l-utils -y
-```
-
-### Clone the project
-
-```bash
-git clone https://github.com/jones2126/deer-defense-project.git
-cd deer-defense-project
-```
-
-### Install dependencies
-
-No virtual environment needed — install system-wide (simpler for a dedicated SBC):
-
-```bash
-pip3 install -r orange-pi-code/requirements.txt --break-system-packages
-```
-
-### Verify Camera
-
-```bash
-fswebcam -r 1280x720 --png 0 test.jpg
-ls -l test.jpg
-```
-
-A working camera produces a file around 2–3 MB. Download via SFTP (e.g. FileZilla, `root@<ip>`) to check image quality. Cheap generic webcams may produce kernel warnings but often still work at lower resolutions.
-
-### Run (CPU/prototype mode)
-
-```bash
-python3 orange-pi-code/main.py
-```
-
-### Configuration
-
-Edit `orange-pi-code/config.py` to set:
-- `TARGET_CLASS` — text prompt for YOLO-World (default: `"deer"`)
-- `CONFIDENCE_THRESHOLD` — detection confidence cutoff (default: `0.5`)
-- `COOLDOWN_SECONDS` — delay between triggers (default: `3`)
-- `BURST_DURATION` — water burst length in seconds (default: `0.5`)
-- `TRIGGER_PIN` — GPIO pin number connected to the MOSFET/relay gate (default: `18`)
-- `FIRE_ZONE_*` — fractions of the frame defining the protected garden area
-
----
-
 ### OS Image — Setting Up the SD Card
 
 **Recommended OS: Official Orange Pi image (Debian Bookworm server)**
@@ -95,6 +47,54 @@ Edit `orange-pi-code/config.py` to set:
    ```bash
    sudo apt update && sudo apt upgrade -y
    ```
+
+---
+
+### Prerequisites
+
+```bash
+sudo apt install python3-pip python3-opencv python3-pil git gpiod i2c-tools fswebcam v4l-utils -y
+```
+
+### Clone the project
+
+```bash
+git clone https://github.com/jones2126/deer-defense-project.git
+cd deer-defense-project
+```
+
+### Install dependencies
+
+No virtual environment needed — install system-wide (simpler for a dedicated SBC):
+
+```bash
+pip3 install -r orange-pi-code/requirements.txt --break-system-packages
+```
+
+### Verify Camera
+
+```bash
+fswebcam -r 1280x720 --png 0 test.jpg
+ls -l test.jpg
+```
+
+A working camera produces a file around 2–3 MB. Download via SFTP (e.g. FileZilla, `root@<ip>`) to check image quality. Cheap generic webcams may produce kernel warnings but often still work at lower resolutions.
+
+### Run (CPU/prototype mode)
+
+```bash
+python3 orange-pi-code/main.py
+```
+
+### Configuration
+
+Edit `orange-pi-code/config.py` to set:
+- `TARGET_CLASS` — text prompt for YOLO-World (default: `"deer"`)
+- `CONFIDENCE_THRESHOLD` — detection confidence cutoff (default: `0.5`)
+- `COOLDOWN_SECONDS` — delay between triggers (default: `3`)
+- `BURST_DURATION` — water burst length in seconds (default: `0.5`)
+- `TRIGGER_PIN` — GPIO pin number connected to the MOSFET/relay gate (default: `18`)
+- `FIRE_ZONE_*` — fractions of the frame defining the protected garden area
 
 ---
 
