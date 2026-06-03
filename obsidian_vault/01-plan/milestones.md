@@ -82,6 +82,9 @@ A working camera produces a file around 2–3 MB. Download via SFTP (e.g. FileZi
 
 ### Run (CPU/prototype mode)
 
+> **Prerequisites:** All hardware must be assembled and calibrated before running the full
+> system. Follow the Phase steps below first. Come back here once everything is wired and tested.
+
 ```bash
 python3 orange-pi-code/main.py
 ```
@@ -109,15 +112,113 @@ Edit `orange-pi-code/config.py` to set:
 
 **Tip**: 3D print a pan-tilt turret — many STL files on Thingiverse/Printables.
 
-### Phase 2: Electronics Assembly & Basic Control (2–4 days)
-1. Wire the two servos (signal, power, ground). Test with simple Python PWM first.
-2. Build the trigger circuit:
-   - MOSFET version: GPIO → Gate drives Drain/Source to switch water gun pump
-   - Relay version: simpler, safer isolation
-3. Connect USB camera and verify it works (`lsusb`, `fswebcam`, or OpenCV test)
-4. Test basic movement + trigger without AI
+### Phase 2: Pan-Tilt Assembly & Servo Testing (2–4 days)
 
-**Recommended libraries**: `OPi.GPIO` or `gpiod` for GPIO; `adafruit-circuitpython-pca9685` if using the PWM driver.
+#### 2a. Mechanical Assembly
+
+1. Assemble the DiGiYes pan-tilt bracket following its included instructions:
+   - Mount one MG996R into the **tilt** (L-shaped) bracket — this controls up/down
+   - Mount the second MG996R into the **pan** (U-shaped) bracket — this controls left/right
+   - The tilt assembly sits on top of the pan servo arm
+2. Attach the water gun to the tilt bracket so it points forward when both servos are at 90°
+3. Leave servo signal wires loose for now — they connect to the PCA9685 next
+
+#### 2b. Wire the PCA9685 Servo Driver to the Orange Pi 5
+
+The PCA9685 takes I2C commands from the Orange Pi and generates the PWM signals the servos need. Power the servo rail from the buck converter — **not** from the Orange Pi GPIO pins (servos draw too much current).
+
+| PCA9685 pin | Orange Pi 5 40-pin header | Notes |
+|---|---|---|
+| VCC | Pin 1 (3.3V) | Logic power for the PCA9685 chip |
+| GND | Pin 6 (GND) | |
+| SDA | Pin 3 (I2C-1 SDA) | |
+| SCL | Pin 5 (I2C-1 SCL) | |
+| V+ | Buck converter 5V output | Servo power rail — wire directly, bypass Pi |
+
+Connect the servo signal/power/ground connectors to PCA9685 channels:
+- **Channel 0** — pan servo
+- **Channel 1** — tilt servo
+
+#### 2c. Enable I2C on the Orange Pi 5
+
+```bash
+sudo orangepi-config
+```
+
+Navigate to **System → Hardware**, enable **i2c1**, then reboot:
+
+```bash
+sudo reboot
+```
+
+#### 2d. Verify the PCA9685 is Detected
+
+```bash
+i2cdetect -y 1
+```
+
+You should see `40` in the grid — that is the PCA9685's default I2C address. If nothing appears, recheck wiring and confirm I2C was saved in orangepi-config.
+
+#### 2e. Install Servo Libraries
+
+```bash
+pip3 install adafruit-blinka adafruit-circuitpython-pca9685 adafruit-circuitpython-motor --break-system-packages
+```
+
+#### 2f. Test Servo Movement
+
+Save and run the following as a quick sanity check:
+
+```bash
+python3 orange-pi-code/test_servos.py
+```
+
+`orange-pi-code/test_servos.py`:
+
+```python
+import time
+import board
+import busio
+from adafruit_pca9685 import PCA9685
+from adafruit_motor import servo
+
+i2c = busio.I2C(board.SCL, board.SDA)
+pca = PCA9685(i2c)
+pca.frequency = 50
+
+pan  = servo.Servo(pca.channels[0], min_pulse=500, max_pulse=2500)
+tilt = servo.Servo(pca.channels[1], min_pulse=500, max_pulse=2500)
+
+print("Centering both servos to 90°...")
+pan.angle  = 90
+tilt.angle = 90
+time.sleep(1)
+
+print("Sweeping pan: left → center → right...")
+for angle in [45, 90, 135, 90]:
+    pan.angle = angle
+    time.sleep(0.6)
+
+print("Sweeping tilt: up → center → down...")
+for angle in [60, 90, 120, 90]:
+    tilt.angle = angle
+    time.sleep(0.6)
+
+print("Done.")
+pca.deinit()
+```
+
+Both servos should move smoothly through the sweep. If a servo jitters or stalls, check the V+ power rail — insufficient servo power is the most common cause.
+
+#### 2g. Build the Trigger Circuit (water gun)
+
+1. Disassemble the water gun and identify the two wires going to the pump motor trigger
+2. Wire a MOSFET or relay in parallel with the trigger contacts:
+   - **MOSFET (IRLZ44N)**: GPIO pin → 10kΩ → Gate; 220Ω between Gate and GND; Drain/Source across trigger contacts
+   - **Relay module**: GPIO pin → relay IN; relay COM/NO across trigger contacts
+3. Test the trigger independently before integrating with the rest of the code
+
+**Recommended libraries**: `gpiod` for GPIO control of the trigger pin.
 
 ### Phase 3: AI Model — YOLO-World Inference (3–7 days)
 
